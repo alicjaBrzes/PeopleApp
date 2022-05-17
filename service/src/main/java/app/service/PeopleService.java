@@ -2,6 +2,7 @@ package main.java.app.service;
 import main.java.app.persistence.model.Person;
 import main.java.app.persistence.model.type.UserType;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class PeopleService {
@@ -33,6 +34,37 @@ public class PeopleService {
             throw new IllegalArgumentException("Person object is null");
         };
         peopleList.remove(person);
+    }
+
+    public List<Person> sortUsersByAge() {
+        return peopleList
+                .stream()
+                .sorted(Comparator.comparing(Person::getUserAge))
+                .toList();
+    }
+
+    public List<Person> getUsersByType(UserType userType) {
+        if (userType == null) {
+            throw new IllegalArgumentException("User type is null");
+        }
+
+        return switch (userType) {
+            case NEW -> peopleList
+                    .stream()
+                    .filter(UserType.NEW)
+                    .toList();
+
+            case REGULAR -> peopleList
+                    .stream()
+                    .filter(UserType.REGULAR)
+                    .toList();
+
+            case PRO -> peopleList
+                    .stream()
+                    .filter(UserType.PRO)
+                    .toList();
+        };
+
     }
 
 }
